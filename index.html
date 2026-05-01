@@ -13,7 +13,6 @@
 <meta name="twitter:title" content="@zxccyan | profile">
 <meta name="twitter:description" content="Personal page with links">
 
-<!-- FAVICON (аватарка страницы) -->
 <link rel="icon" type="image/png" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
 <link rel="apple-touch-icon" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
 
@@ -32,7 +31,6 @@
         backdrop-filter: blur(8px);
     }
 
-    /* Overlay для затемнения */
     body::before {
         content: '';
         position: fixed;
@@ -44,7 +42,6 @@
         z-index: -1;
     }
 
-    /* БЛОК ЗАГЛУШКИ "CLICK TO CONTINUE" */
     .overlay {
         position: fixed;
         top: 0;
@@ -81,7 +78,6 @@
         50% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 20px rgba(255,255,255,0.5); }
     }
 
-    /* ОСНОВНОЙ ПРОФИЛЬ (изначально скрыт) */
     .profile-container {
         max-width: 600px;
         margin: 0 auto;
@@ -111,7 +107,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 3rem;
         overflow: hidden;
     }
 
@@ -164,23 +159,116 @@
         border-color: #3b82f6;
     }
 
-    .audio-player {
+    .music-section {
         background: rgba(11, 15, 26, 0.8);
-        border-radius: 40px;
-        padding: 0.75rem 1rem;
-        margin-top: 0;
+        border-radius: 28px;
+        padding: 1rem;
+        margin-top: 0.5rem;
     }
 
-    .audio-player audio {
+    .player-area {
+        margin-bottom: 0.8rem;
+    }
+
+    .player-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .nav-btn {
+        background: rgba(72, 187, 255, 0.2);
+        border: 1px solid rgba(72, 187, 255, 0.4);
+        border-radius: 40px;
+        padding: 0.5rem 1.2rem;
+        color: #e6edf3;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .nav-btn:hover {
+        background: rgba(72, 187, 255, 0.4);
+        border-color: #3b82f6;
+        transform: scale(1.02);
+    }
+
+    .track-name {
+        text-align: center;
+        font-size: 0.8rem;
+        color: #8b9acf;
+        margin-bottom: 0.5rem;
+        padding: 0.3rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 20px;
+    }
+
+    audio {
         width: 100%;
         background: #0f1119;
         border-radius: 40px;
+    }
+
+    .toggle-playlist-btn {
+        background: rgba(72, 187, 255, 0.2);
+        border: 1px solid rgba(72, 187, 255, 0.4);
+        border-radius: 40px;
+        padding: 0.4rem 1rem;
+        color: #e6edf3;
+        cursor: pointer;
+        font-size: 0.8rem;
+        margin-top: 0.8rem;
+        width: 100%;
+        transition: all 0.2s;
+    }
+
+    .toggle-playlist-btn:hover {
+        background: rgba(72, 187, 255, 0.4);
+    }
+
+    .playlist-list {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+        margin-top: 0.8rem;
+        border-radius: 20px;
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .playlist-list.open {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .playlist-item {
+        padding: 0.6rem 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid rgba(72, 187, 255, 0.2);
+        transition: all 0.2s;
+        font-size: 0.85rem;
+        color: #c0d0ff;
+    }
+
+    .playlist-item:hover {
+        background: rgba(72, 187, 255, 0.2);
+    }
+
+    .playlist-item.active-track {
+        background: rgba(72, 187, 255, 0.3);
+        color: white;
+        border-left: 3px solid #3b82f6;
+    }
+
+    .playlist-item:last-child {
+        border-bottom: none;
     }
 </style>
 </head>
 <body>
 
-<!-- Затемняющий оверлей с текстом "CLICK TO CONTINUE" -->
 <div class="overlay" id="overlay">
     <div class="overlay-text">CLICK TO CONTINUE</div>
 </div>
@@ -201,32 +289,119 @@
         </div>
     </div>
 
-    <div class="audio-player">
-        <audio id="bgAudio" controls loop>
-            <source src="https://gitlab.com/MezeLeem/file/-/raw/main/1f2c5505-2997-4a77-afc6-64f15f0c6f31.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+    <div class="music-section">
+        <div class="player-area">
+            <div class="player-controls">
+                <button class="nav-btn" id="prevBtn">◀ Предыдущий</button>
+                <button class="nav-btn" id="nextBtn">Следующий ▶</button>
+            </div>
+            <div class="track-name" id="currentTrackName">Загрузка...</div>
+            <audio id="bgAudio" controls loop>
+                <source src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <button class="toggle-playlist-btn" id="togglePlaylistBtn">🎵 ПОКАЗАТЬ ПЛЕЙЛИСТ ▼</button>
+        
+        <div class="playlist-list" id="playlistList"></div>
     </div>
 </div>
 
 <script>
+    // ===== ПЛЕЙЛИСТ (6 ТРЕКОВ) =====
+    const playlist = [
+        { name: "it was a good day", url: "https://gitlab.com/MezeLeem/file/-/raw/main/1f2c5505-2997-4a77-afc6-64f15f0c6f31.mp3" },
+        { name: "VALENTINA REMIX", url: "https://gitlab.com/MezeLeem/musicssss/-/raw/main/Aarne_Toxi_-_VALENTINA_REMIX_80172786.mp3?ref_type=heads" },
+        { name: "NOBODY", url: "https://gitlab.com/MezeLeem/musicssss/-/raw/main/Aarne_Toxi_Big_Baby_Tape_-_NOBODY_80172673.mp3?ref_type=heads" },
+        { name: "Этою весной", url: "https://gitlab.com/MezeLeem/musicssss/-/raw/main/Nyan.mp3_-_%D0%AD%D1%82%D0%BE%D1%8E_%D0%B2%D0%B5%D1%81%D0%BD%D0%BE%D0%B9__hitmo.net_.mp3?ref_type=heads" },
+        { name: "Йупи Йо", url: "https://gitlab.com/MezeLeem/musicssss/-/raw/main/scally-milano-feat.-163onmyneck-amp-mayot-jjupi-jjo.mp3?ref_type=heads" },
+        { name: "Jah Khalib - SnD", url: "https://gitlab.com/MezeLeem/musicssss/-/raw/main/Jah_Khalib_-_SnD_78618516.mp3?ref_type=heads" }
+    ];
+
+    let currentIndex = 0;
+    const audio = document.getElementById('bgAudio');
+    const trackNameEl = document.getElementById('currentTrackName');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const toggleBtn = document.getElementById('togglePlaylistBtn');
+    const playlistContainer = document.getElementById('playlistList');
+
+    function buildPlaylistList() {
+        playlistContainer.innerHTML = '';
+        playlist.forEach((track, idx) => {
+            const item = document.createElement('div');
+            item.className = 'playlist-item';
+            if (idx === currentIndex) item.classList.add('active-track');
+            item.innerHTML = `${idx + 1}. ${track.name}`;
+            item.addEventListener('click', () => {
+                loadTrack(idx);
+                if (!audio.paused) audio.play().catch(e => console.log(e));
+            });
+            playlistContainer.appendChild(item);
+        });
+    }
+
+    function loadTrack(index) {
+        if (index < 0) index = playlist.length - 1;
+        if (index >= playlist.length) index = 0;
+        currentIndex = index;
+        
+        const track = playlist[currentIndex];
+        trackNameEl.textContent = `🎧 ${track.name}`;
+        
+        const source = audio.querySelector('source');
+        source.src = track.url;
+        audio.load();
+        
+        document.querySelectorAll('.playlist-item').forEach((item, idx) => {
+            if (idx === currentIndex) item.classList.add('active-track');
+            else item.classList.remove('active-track');
+        });
+        
+        if (!audio.paused) {
+            audio.play().catch(e => console.log('Play error:', e));
+        }
+    }
+
+    function nextTrack() { loadTrack(currentIndex + 1); }
+    function prevTrack() { loadTrack(currentIndex - 1); }
+
+    audio.addEventListener('ended', () => { nextTrack(); });
+    prevBtn.addEventListener('click', prevTrack);
+    nextBtn.addEventListener('click', nextTrack);
+
+    let isPlaylistOpen = false;
+    toggleBtn.addEventListener('click', () => {
+        if (isPlaylistOpen) {
+            playlistContainer.classList.remove('open');
+            toggleBtn.innerHTML = '🎵 ПОКАЗАТЬ ПЛЕЙЛИСТ ▼';
+        } else {
+            playlistContainer.classList.add('open');
+            toggleBtn.innerHTML = '🎵 СКРЫТЬ ПЛЕЙЛИСТ ▲';
+        }
+        isPlaylistOpen = !isPlaylistOpen;
+    });
+
     const overlay = document.getElementById('overlay');
     const profile = document.getElementById('profile');
-    const audio = document.getElementById('bgAudio');
 
     function enterSite() {
         overlay.classList.add('hidden');
         profile.classList.add('visible');
         
-        audio.muted = false;
+        if (audio.muted !== false) audio.muted = false;
         audio.volume = 0.7;
-        audio.play().catch(e => {
-            console.log('Autoplay blocked:', e);
-            document.body.addEventListener('click', function playOnce() {
-                audio.play();
-                document.body.removeEventListener('click', playOnce);
-            }, { once: true });
-        });
+        
+        if (audio.paused) {
+            audio.play().catch(e => {
+                console.log('Autoplay blocked:', e);
+                document.body.addEventListener('click', function playOnce() {
+                    if (audio.paused) audio.play();
+                    document.body.removeEventListener('click', playOnce);
+                }, { once: true });
+            });
+        }
     }
 
     overlay.addEventListener('click', enterSite);
@@ -238,6 +413,9 @@
             prompt('Copy manually:', text);
         });
     }
+
+    buildPlaylistList();
+    loadTrack(0);
 </script>
 </body>
 </html>
