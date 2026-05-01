@@ -12,6 +12,11 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="@zxccyan | profile">
 <meta name="twitter:description" content="Personal page with links">
+
+<!-- FAVICON (аватарка страницы) -->
+<link rel="icon" type="image/png" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
+<link rel="apple-touch-icon" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
+
 <style>
     * {
         margin: 0;
@@ -182,7 +187,7 @@
 
 <div class="profile-container" id="profile">
     <div class="avatar">
-        <img src="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png" alt="avatar">
+        <img src="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads" alt="avatar">
     </div>
     <div class="username">zxccyan</div>
     <div class="display-name">zxccyan</div>
@@ -210,17 +215,13 @@
     const audio = document.getElementById('bgAudio');
 
     function enterSite() {
-        // Скрываем оверлей
         overlay.classList.add('hidden');
-        // Показываем профиль
         profile.classList.add('visible');
         
-        // Запускаем музыку
         audio.muted = false;
         audio.volume = 0.7;
         audio.play().catch(e => {
             console.log('Autoplay blocked:', e);
-            // Если браузер блокирует автовоспроизведение, запускаем по клику
             document.body.addEventListener('click', function playOnce() {
                 audio.play();
                 document.body.removeEventListener('click', playOnce);
