@@ -4,21 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>zxccyan · bio</title>
-    <meta name="description" content="Анимированный профиль zxccyan">
-    <link rel="icon" type="image/png" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
-    <meta property="og:title" content="⚡ zxccyan | bio ⚡">
-    <meta property="og:description" content="Персональная страница zxccyan">
+    
+    <!-- Базовые мета-теги -->
+    <meta name="description" content="Анимированный профиль zxccyan с 3D-эффектом, музыкой и плавным трейлом курсора">
+    <meta name="keywords" content="zxccyan, bio, animated profile, 3D card, cursor trail">
+    <meta name="author" content="zxccyan">
+    <meta name="copyright" content="zxccyan">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Russian">
+    <meta name="theme-color" content="#0a0f1e">
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zxccyan.bio/">
+    <meta property="og:title" content="⚡ zxccyan | bio ⚡" id="ogTitle">
+    <meta property="og:description" content="Персональная страница zxccyan с 3D-карточкой, музыкой и анимированным интерфейсом" id="ogDesc">
+    <meta property="og:image" content="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:site_name" content="zxccyan bio">
+    <meta property="og:locale" content="ru_RU">
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="zxccyan · bio">
-    <meta name="twitter:description" content="профиль zxccyan">
+    <meta name="twitter:url" content="https://zxccyan.bio/">
+    <meta name="twitter:title" content="zxccyan · bio" id="twTitle">
+    <meta name="twitter:description" content="Интерактивный профиль zxccyan с 3D-наклоном и музыкой" id="twDesc">
+    <meta name="twitter:image" content="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
+    
+    <!-- Дополнительные мета-теги для мессенджеров -->
+    <meta property="telegram:channel" content="@zxccyan">
+    <meta property="discord:server" content="https://discord.gg/zxccyan">
+    <meta property="whatsapp:description" content="Анимированный профиль zxccyan">
+    
+    <!-- Теги для браузера и PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="zxccyan bio">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#0a0f1e">
+    <meta name="msapplication-navbutton-color" content="#0a0f1e">
+    
+    <link rel="icon" type="image/png" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
+    <link rel="apple-touch-icon" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
+    <link rel="manifest" href="#">
 
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none; /* скрываем стандартный курсор */
+            cursor: none;
         }
 
         body {
@@ -34,7 +70,6 @@
             overflow-x: hidden;
         }
 
-        /* размытый слой */
         body::before {
             content: '';
             position: fixed;
@@ -43,37 +78,50 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(10px);
             z-index: 0;
         }
 
-        /* ========= КАСТОМНЫЙ КУРСОР (круг) ========= */
+        /* КУРСОР (уменьшенный) */
         .custom-cursor {
             position: fixed;
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            background: rgba(72, 187, 255, 0.7);
+            background: rgba(72, 187, 255, 0.9);
             backdrop-filter: blur(2px);
             border: 2px solid rgba(255, 255, 255, 0.9);
             pointer-events: none;
             z-index: 9999;
-            transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+            transition: width 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), height 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), background 0.2s ease;
             transform: translate(-50%, -50%);
             will-change: left, top;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
         }
-        /* состояние при наведении на кликабельные элементы */
+
         .custom-cursor.hover {
-            width: 60px;
-            height: 60px;
-            background: rgba(72, 187, 255, 0.3);
+            width: 48px;
+            height: 48px;
+            background: rgba(72, 187, 255, 0.4);
             border: 2px solid white;
             backdrop-filter: blur(4px);
             box-shadow: 0 0 25px cyan;
         }
 
-        /* ========= ОВЕРЛЕЙ ========= */
+        /* ТРЕЙЛ (абсолютно синхронизирован с курсором) */
+        .trail {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.7);
+            pointer-events: none;
+            z-index: 9998;
+            filter: blur(1px);
+            transition: all 0.05s linear;
+            will-change: left, top;
+        }
+
         .overlay {
             position: fixed;
             top: 0;
@@ -118,7 +166,6 @@
             .animated-banner { font-size: 2rem; letter-spacing: 4px; white-space: normal; text-align: center; }
         }
 
-        /* 3D КАРТОЧКА БИО */
         .tilt-container {
             perspective: 1200px;
             width: 100%;
@@ -202,15 +249,11 @@
 </head>
 <body>
 
-<!-- КАСТОМНЫЙ КУРСОР-КРУГ -->
 <div class="custom-cursor" id="customCursor"></div>
-
-<!-- ОВЕРЛЕЙ -->
 <div class="overlay" id="overlay">
     <div class="animated-banner">CLICK TO CONTINUE</div>
 </div>
 
-<!-- КАРТОЧКА БИО -->
 <div class="tilt-container">
     <div class="bio-card" id="bioCard">
         <div class="avatar">
@@ -219,12 +262,8 @@
         <div class="username">zxccyan</div>
         <div class="display-name">@zxccyan</div>
         <div class="social-links">
-            <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank" rel="noopener noreferrer">
-                🔧 GitLab
-            </a>
-            <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">
-                💬 Discord: zxccyans (click to copy)
-            </div>
+            <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank" rel="noopener noreferrer">🔧 GitLab</a>
+            <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">💬 Discord</div>
         </div>
     </div>
 </div>
@@ -234,138 +273,193 @@
 </audio>
 
 <script>
-    // ========= 1. КАСТОМНЫЙ КУРСОР =========
-    const cursor = document.getElementById('customCursor');
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    
-    // движение мыши (обновляем координаты)
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-    
-    // плавное движение круга (requestAnimationFrame)
-    function animateCursor() {
-        cursorX += (mouseX - cursorX) * 0.2;
-        cursorY += (mouseY - cursorY) * 0.2;
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-        requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
-    
-    // эффект "наведение" – увеличение круга на кликабельных элементах
-    const clickables = document.querySelectorAll('a, .social-button, button, [onclick]');
-    clickables.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.classList.add('hover');
+    (function() {
+        // ========= 1. АБСОЛЮТНАЯ СИНХРОНИЗАЦИЯ КУРСОРА И ТРЕЙЛА =========
+        const cursor = document.getElementById('customCursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        
+        // Создаем 14 частиц трейла для максимальной плавности
+        const TRAIL_COUNT = 14;
+        let trailElements = [];
+        let trailPositions = [];
+        
+        for (let i = 0; i < TRAIL_COUNT; i++) {
+            const trail = document.createElement('div');
+            trail.className = 'trail';
+            document.body.appendChild(trail);
+            trailElements.push(trail);
+            trailPositions.push({ x: 0, y: 0 });
+        }
+        
+        // Получаем реальные координаты мыши
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
-        el.addEventListener('mouseleave', () => {
-            cursor.classList.remove('hover');
+        
+        // Функция обновления позиций — вызывает requestAnimationFrame для плавности
+        function updatePositions() {
+            // 1. Движение основного курсора (с небольшим инерционным сглаживанием)
+            cursorX += (mouseX - cursorX) * 0.25;
+            cursorY += (mouseY - cursorY) * 0.25;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            
+            // 2. Обновление трейла: позиции частиц — это история предыдущих положений курсора
+            trailPositions.unshift({ x: cursorX, y: cursorY });
+            trailPositions.pop();
+            
+            for (let i = 0; i < TRAIL_COUNT; i++) {
+                const pos = trailPositions[i];
+                if (pos) {
+                    trailElements[i].style.left = pos.x + 'px';
+                    trailElements[i].style.top = pos.y + 'px';
+                    // Плавное затухание и уменьшение размера
+                    const factor = i / TRAIL_COUNT;
+                    const opacity = 1 - factor * 0.85;
+                    const size = 8 - factor * 6;
+                    trailElements[i].style.opacity = opacity;
+                    trailElements[i].style.width = Math.max(2, size) + 'px';
+                    trailElements[i].style.height = Math.max(2, size) + 'px';
+                }
+            }
+            
+            requestAnimationFrame(updatePositions);
+        }
+        updatePositions();
+        
+        // Эффект увеличения курсора на кликабельных элементах
+        const clickables = document.querySelectorAll('a, .social-button, [onclick], .overlay');
+        clickables.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
         });
-    });
-    // добавляем также на сам оверлей (до его исчезновения)
-    const overlayDiv = document.getElementById('overlay');
-    overlayDiv.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-    overlayDiv.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    
-    // ========= 2. БАННЕР + МУЗЫКА + АКТИВАЦИЯ =========
-    const overlay = document.getElementById('overlay');
-    const bioCard = document.getElementById('bioCard');
-    const audio = document.getElementById('bgMusic');
-    let active = false;
-    
-    function startSite() {
-        if (active) return;
-        active = true;
-        overlay.classList.add('hidden');
-        audio.muted = false;
-        audio.volume = 0.5;
-        audio.play().catch(e => console.log("autoplay blocked, but site works"));
-        document.body.style.overflow = '';
-    }
-    
-    overlay.addEventListener('click', startSite);
-    document.addEventListener('keydown', function once(e) {
-        if (overlay && !overlay.classList.contains('hidden')) {
-            startSite();
-            document.removeEventListener('keydown', once);
+        
+        // ========= 2. ПЛАВНОЕ ПОЯВЛЕНИЕ МУЗЫКИ =========
+        const overlay = document.getElementById('overlay');
+        const bioCard = document.getElementById('bioCard');
+        const audio = document.getElementById('bgMusic');
+        let active = false;
+        let fadeInterval = null;
+        
+        function fadeInMusic(targetVolume = 0.5, duration = 1800) {
+            if (fadeInterval) clearInterval(fadeInterval);
+            const startVolume = audio.volume;
+            const steps = 40;
+            let step = 0;
+            const increment = (targetVolume - startVolume) / steps;
+            fadeInterval = setInterval(() => {
+                step++;
+                let newVol = startVolume + increment * step;
+                if (step >= steps) {
+                    newVol = targetVolume;
+                    clearInterval(fadeInterval);
+                    fadeInterval = null;
+                }
+                audio.volume = Math.min(1, Math.max(0, newVol));
+            }, duration / steps);
         }
-    });
-    
-    // ========= 3. 3D-НАКЛОН КАРТОЧКИ ЗА КУРСОРОМ =========
-    if (bioCard) {
-        const card = bioCard;
-        const maxRotate = 12;
-        function updateTilt(e) {
-            if (!active) return;
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            const mouseXnorm = (e.clientX - centerX) / centerX;
-            const mouseYnorm = (e.clientY - centerY) / centerY;
-            const rotateY = mouseXnorm * maxRotate;
-            const rotateX = -mouseYnorm * maxRotate;
-            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px)`;
+        
+        function startSite() {
+            if (active) return;
+            active = true;
+            overlay.classList.add('hidden');
+            audio.muted = false;
+            audio.volume = 0;
+            audio.play().catch(e => console.log("autoplay blocked"));
+            fadeInMusic(0.5, 1800);
+            document.body.style.overflow = '';
         }
-        function resetTilt() {
-            if (!active) return;
-            card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
-        }
-        window.addEventListener('mousemove', updateTilt);
-        window.addEventListener('mouseleave', resetTilt);
-    }
-    
-    // ========= 4. АНИМАЦИЯ ЗАГОЛОВКА (печатание) =========
-    const titleElement = document.querySelector('title');
-    const originalTitle = "zxccyan";
-    const animations = [
-        { text: "zxccyan", delay: 2000 },
-        { text: "⋆⧸⋆ zxccyan ⋆⧹⋆", delay: 2500 },
-        { text: "✦ zxccyan ✦", delay: 2200 },
-        { text: "◈ zxccyan ◈", delay: 2400 }
-    ];
-    let step = 0;
-    let isDeleting = false;
-    let currentText = "";
-    let charIndex = 0;
-    let timer = null;
-    
-    function animateTitle() {
-        const target = animations[step].text;
-        if (!isDeleting) {
-            if (charIndex <= target.length) {
-                currentText = target.substring(0, charIndex);
-                document.title = currentText;
-                charIndex++;
-                timer = setTimeout(animateTitle, 120);
-            } else {
-                isDeleting = true;
-                clearTimeout(timer);
-                timer = setTimeout(animateTitle, animations[step].delay);
+        
+        overlay.addEventListener('click', startSite);
+        document.addEventListener('keydown', function once(e) {
+            if (overlay && !overlay.classList.contains('hidden')) {
+                startSite();
+                document.removeEventListener('keydown', once);
             }
-        } else {
-            if (charIndex >= 0) {
-                currentText = target.substring(0, charIndex);
-                document.title = currentText || " ";
-                charIndex--;
-                timer = setTimeout(animateTitle, 60);
+        });
+        
+        // ========= 3. 3D-НАКЛОН КАРТОЧКИ =========
+        if (bioCard) {
+            const card = bioCard;
+            const maxRotate = 12;
+            function updateTilt(e) {
+                if (!active) return;
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const mouseXnorm = (e.clientX - centerX) / centerX;
+                const mouseYnorm = (e.clientY - centerY) / centerY;
+                const rotateY = mouseXnorm * maxRotate;
+                const rotateX = -mouseYnorm * maxRotate;
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px)`;
+            }
+            function resetTilt() {
+                if (!active) return;
+                card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+            }
+            window.addEventListener('mousemove', updateTilt);
+            window.addEventListener('mouseleave', resetTilt);
+        }
+        
+        // ========= 4. АНИМАЦИЯ ЗАГОЛОВКА И МЕТА-ТЕГОВ =========
+        const titleAnimations = [
+            "zxccyan", "⋆⧸⋆ zxccyan ⋆⧹⋆", "✦ zxccyan ✦", "◈ zxccyan ◈",
+            "⚡ zxccyan ⚡", "◆━━ zxccyan ━━◆", "『 zxccyan 』", "【 zxccyan 】",
+            "『◉ zxccyan ◉』", "⌘ zxccyan ⌘", "☯ zxccyan ☯", "❖ zxccyan ❖",
+            "✧༺ zxccyan ༻✧", "» zxccyan «", "『✧ zxccyan ✧』", "▰▰ zxccyan ▰▰"
+        ];
+        let animIdx = 0, deleting = false, charPos = 0;
+        let titleTimer = null;
+        
+        function animateTitle() {
+            const target = titleAnimations[animIdx];
+            if (!deleting) {
+                if (charPos <= target.length) {
+                    const partial = target.substring(0, charPos) || " ";
+                    document.title = partial;
+                    const ogTitle = document.getElementById('ogTitle');
+                    const ogDesc = document.getElementById('ogDesc');
+                    const twTitle = document.getElementById('twTitle');
+                    const twDesc = document.getElementById('twDesc');
+                    if (ogTitle) ogTitle.setAttribute('content', `✨ ${partial} ✨`);
+                    if (ogDesc) ogDesc.setAttribute('content', `Интерактивный профиль ${partial}`);
+                    if (twTitle) twTitle.setAttribute('content', `✨ ${partial} ✨`);
+                    if (twDesc) twDesc.setAttribute('content', `3D-био пользователя ${partial}`);
+                    charPos++;
+                    titleTimer = setTimeout(animateTitle, 55);
+                } else {
+                    deleting = true;
+                    titleTimer = setTimeout(animateTitle, 1800);
+                }
             } else {
-                isDeleting = false;
-                step = (step + 1) % animations.length;
-                charIndex = 0;
-                currentText = "";
-                clearTimeout(timer);
-                timer = setTimeout(animateTitle, 200);
+                if (charPos >= 0) {
+                    const partial = target.substring(0, charPos) || " ";
+                    document.title = partial;
+                    const ogTitle = document.getElementById('ogTitle');
+                    const ogDesc = document.getElementById('ogDesc');
+                    const twTitle = document.getElementById('twTitle');
+                    const twDesc = document.getElementById('twDesc');
+                    if (ogTitle) ogTitle.setAttribute('content', `✨ ${partial} ✨`);
+                    if (ogDesc) ogDesc.setAttribute('content', `Интерактивный профиль ${partial}`);
+                    if (twTitle) twTitle.setAttribute('content', `✨ ${partial} ✨`);
+                    if (twDesc) twDesc.setAttribute('content', `3D-био пользователя ${partial}`);
+                    charPos--;
+                    titleTimer = setTimeout(animateTitle, 35);
+                } else {
+                    deleting = false;
+                    animIdx = (animIdx + 1) % titleAnimations.length;
+                    charPos = 0;
+                    titleTimer = setTimeout(animateTitle, 200);
+                }
             }
         }
-    }
-    animateTitle();
-    
-    // копирование в буфер
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => alert('Copied: ' + text)).catch(() => prompt('Copy manually:', text));
-    }
+        animateTitle();
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => alert('Copied: ' + text)).catch(() => prompt('Copy manually:', text));
+        }
+    })();
 </script>
 </body>
 </html>
