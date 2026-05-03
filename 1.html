@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>zxccyan</title>
+    <meta name="description" content="Анимированный профиль zxccyan">
+    <link rel="icon" type="image/png" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
+    
+    <!-- Мета-теги (чистые) -->
+    <meta property="og:title" content="⚡ zxccyan | bio ⚡">
+    <meta property="og:description" content="Персональная страница zxccyan">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="zxccyan · bio">
+    <meta name="twitter:description" content="профиль zxccyan">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: url('https://gitlab.com/MezeLeem/file/-/raw/main/photo-1506905925346-21bda4d32df4.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', 'Poppins', 'Fira Code', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
+            z-index: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            cursor: pointer;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .animated-banner {
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ffffff, #a0f0ff, #70c8ff);
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: 8px;
+            animation: bannerPulse 1.7s infinite alternate, shimmer 3s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes bannerPulse {
+            0% { transform: scale(0.96); opacity: 0.8; text-shadow: 0 0 5px cyan; }
+            100% { transform: scale(1.08); opacity: 1; text-shadow: 0 0 35px cyan; }
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        @media (max-width: 700px) {
+            .animated-banner { font-size: 2rem; letter-spacing: 4px; white-space: normal; text-align: center; }
+        }
+
+        .tilt-container {
+            perspective: 1200px;
+            width: 100%;
+            max-width: 580px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .bio-card {
+            background: rgba(18, 25, 45, 0.7);
+            backdrop-filter: blur(18px);
+            border-radius: 48px;
+            padding: 2rem;
+            box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(72, 187, 255, 0.25);
+            text-align: center;
+            transition: transform 0.12s ease-out;
+            transform-style: preserve-3d;
+            will-change: transform;
+            width: 100%;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 1rem auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e2a4a, #0f172a);
+            padding: 3px;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .username {
+            font-size: 1.9rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #a0f0ff, #70c8ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.3rem;
+        }
+
+        .display-name {
+            font-size: 0.95rem;
+            color: #bcd0ff;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: rgba(15, 17, 25, 0.7);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(72, 187, 255, 0.3);
+            border-radius: 60px;
+            padding: 0.85rem;
+            color: #eef3ff;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .social-button:hover {
+            background: #1a1f2e;
+            border-color: #3b82f6;
+            transform: scale(1.02);
+            gap: 1rem;
+        }
+
+        @media (max-width: 550px) {
+            .bio-card { padding: 1.5rem; }
+            .username { font-size: 1.5rem; }
+            .avatar { width: 85px; height: 85px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay">
+    <div class="animated-banner">CLICK TO CONTINUE</div>
+</div>
+
+<div class="tilt-container">
+    <div class="bio-card" id="bioCard">
+        <div class="avatar">
+            <img src="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads" alt="avatar">
+        </div>
+        <div class="username">zxccyan</div>
+        <div class="display-name">@zxccyan</div>
+
+        <div class="social-links">
+            <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank" rel="noopener noreferrer">
+                🔧 GitLab
+            </a>
+            <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">
+                💬 Discord: zxccyans (click to copy)
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio id="bgMusic" loop preload="auto">
+    <source src="https://gitlab.com/MezeLeem/musicssss/-/raw/main/sdftqe4rvq35g64h467gugyrth7uhrtg69ir67r6h7i456h7i84h785656yh783.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // ========= 1. АНИМАЦИЯ ЗАГОЛОВКА (печатание + удаление) =========
+    const titleElement = document.querySelector('title');
+    const originalTitle = "zxccyan";
+    const animations = [
+        { text: "zxccyan", delay: 2000 },
+        { text: "⋆⧸⋆ zxccyan ⋆⧹⋆", delay: 2500 },
+        { text: "✦ zxccyan ✦", delay: 2200 },
+        { text: "◈ zxccyan ◈", delay: 2400 }
+    ];
+    let step = 0;
+    let isDeleting = false;
+    let currentText = "";
+    let charIndex = 0;
+    let timer = null;
+
+    function animateTitle() {
+        const target = animations[step].text;
+        if (!isDeleting) {
+            // печатаем
+            if (charIndex <= target.length) {
+                currentText = target.substring(0, charIndex);
+                document.title = currentText;
+                charIndex++;
+                timer = setTimeout(animateTitle, 120);
+            } else {
+                // заканчиваем печать, держим паузу
+                isDeleting = true;
+                clearTimeout(timer);
+                timer = setTimeout(animateTitle, animations[step].delay);
+            }
+        } else {
+            // удаляем
+            if (charIndex >= 0) {
+                currentText = target.substring(0, charIndex);
+                document.title = currentText || " "; // маленький костыль, чтобы не было пусто
+                charIndex--;
+                timer = setTimeout(animateTitle, 60);
+            } else {
+                // переходим к следующему стилю
+                isDeleting = false;
+                step = (step + 1) % animations.length;
+                charIndex = 0;
+                currentText = "";
+                clearTimeout(timer);
+                timer = setTimeout(animateTitle, 200);
+            }
+        }
+    }
+    animateTitle();
+
+    // ========= 2. ОСТАЛЬНАЯ ЛОГИКА (баннер, музыка, 3D-карточка) =========
+    const overlay = document.getElementById('overlay');
+    const bioCard = document.getElementById('bioCard');
+    const audio = document.getElementById('bgMusic');
+    let active = false;
+
+    function startSite() {
+        if (active) return;
+        active = true;
+        overlay.classList.add('hidden');
+        audio.muted = false;
+        audio.volume = 0.5;
+        audio.play().catch(e => console.log('autoplay blocked'));
+        document.body.style.overflow = '';
+    }
+
+    overlay.addEventListener('click', startSite);
+    document.addEventListener('keydown', function once(e) {
+        if (overlay && !overlay.classList.contains('hidden')) {
+            startSite();
+            document.removeEventListener('keydown', once);
+        }
+    });
+
+    if (bioCard) {
+        const card = bioCard;
+        const maxRotate = 12;
+
+        function updateTilt(e) {
+            if (!active) return;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const mouseX = (e.clientX - centerX) / centerX;
+            const mouseY = (e.clientY - centerY) / centerY;
+            const rotateY = mouseX * maxRotate;
+            const rotateX = -mouseY * maxRotate;
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px)`;
+        }
+        
+        function resetTilt() {
+            if (!active) return;
+            card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+        }
+        
+        window.addEventListener('mousemove', updateTilt);
+        window.addEventListener('mouseleave', resetTilt);
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => alert('Copied: ' + text)).catch(() => prompt('Copy manually:', text));
+    }
+</script>
+</body>
+</html>
