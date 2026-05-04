@@ -4,53 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>zxccyan · bio</title>
-    <meta name="description" content="Анимированный профиль zxccyan с эффектом снега после клика">
-    <meta name="author" content="zxccyan">
-    <meta property="og:title" content="⚡ zxccyan | snow bio ⚡" id="ogTitle">
-    <meta property="og:description" content="3D-профиль zxccyan с падающим снегом после клика" id="ogDesc">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="zxccyan · snow bio" id="twTitle">
-    <meta name="twitter:description" content="Интерактивный профиль с 3D-наклоном, музыкой и снегопадом после взаимодействия" id="twDesc">
+    <meta name="description" content="Персональная страница zxccyan">
     <link rel="icon" type="image/png" href="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads">
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(145deg, #0a1428 0%, #07101f 100%);
+            background: url('https://gitlab.com/MezeLeem/file/-/raw/main/advanced-medical-technology-disease-clinical-analysis-medical-science-biotechnology_71956-50034.jpg') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Segoe UI', 'Poppins', 'Fira Code', monospace;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 2rem;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Canvas для снега (изначально скрыт, включится после клика) */
-        #snowCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-        #snowCanvas.active {
-            opacity: 1;
-        }
-
-        /* Полупрозрачный слой для карточки */
         body::before {
             content: '';
             position: fixed;
@@ -58,50 +33,42 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
             z-index: 0;
         }
 
-        /* КУРСОР */
-        .custom-cursor {
+        /* ------ ПРОСТЫЕ СНЕЖИНКИ (ТЕКСТ) ------ */
+        .snow-layer {
             position: fixed;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(72, 187, 255, 0.9);
-            backdrop-filter: blur(2px);
-            border: 2px solid rgba(255, 255, 255, 0.9);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            z-index: 9999;
-            transition: width 0.2s ease, height 0.2s ease;
-            transform: translate(-50%, -50%);
-            will-change: left, top;
-            box-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
+            z-index: 1;
+            overflow: hidden;
         }
 
-        .custom-cursor.hover {
-            width: 48px;
-            height: 48px;
-            background: rgba(72, 187, 255, 0.4);
-            border: 2px solid white;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 0 25px cyan;
-        }
-
-        /* ТРЕЙЛ */
-        .trail {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(0, 255, 255, 0.7);
+        .snowflake {
+            position: absolute;
+            top: -20px;
+            color: white;
+            font-size: 1.2rem;
+            user-select: none;
             pointer-events: none;
-            z-index: 9998;
-            filter: blur(1px);
-            will-change: left, top;
+            text-shadow: 0 0 3px rgba(0,0,0,0.3);
+            animation: fall linear forwards;
         }
 
-        /* ОВЕРЛЕЙ */
+        @keyframes fall {
+            to {
+                transform: translateY(calc(100vh + 50px));
+                opacity: 0;
+            }
+        }
+
+        /* ОВЕРЛЕЙ (БАННЕР) – АНИМАЦИЯ + ASCII АРТ */
         .overlay {
             position: fixed;
             top: 0;
@@ -113,6 +80,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
             z-index: 2000;
             cursor: pointer;
             transition: opacity 0.6s ease, visibility 0.6s ease;
@@ -121,19 +89,22 @@
             opacity: 0;
             visibility: hidden;
         }
-        .animated-banner {
-            font-size: 4rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #ffffff, #a0f0ff, #70c8ff);
-            background-size: 200% auto;
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            letter-spacing: 8px;
+
+        .ascii-banner {
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            color: #a0f0ff;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2rem;
+            border-radius: 32px;
+            backdrop-filter: blur(4px);
+            letter-spacing: 1px;
             animation: bannerPulse 1.7s infinite alternate, shimmer 3s linear infinite;
-            white-space: nowrap;
         }
+
         @keyframes bannerPulse {
             0% { transform: scale(0.96); opacity: 0.8; text-shadow: 0 0 5px cyan; }
             100% { transform: scale(1.08); opacity: 1; text-shadow: 0 0 35px cyan; }
@@ -142,22 +113,33 @@
             0% { background-position: 0% 50%; }
             100% { background-position: 200% 50%; }
         }
-        @media (max-width: 700px) {
-            .animated-banner { font-size: 2rem; letter-spacing: 4px; white-space: normal; text-align: center; }
+
+        @media (max-width: 760px) {
+            .ascii-banner {
+                font-size: 0.5rem;
+                padding: 1rem;
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+        @media (max-width: 550px) {
+            .ascii-banner {
+                font-size: 0.35rem;
+            }
         }
 
-        /* 3D КАРТОЧКА */
         .tilt-container {
             perspective: 1200px;
             width: 100%;
-            max-width: 580px;
+            max-width: 650px;
             margin: 0 auto;
             position: relative;
-            z-index: 20;
+            z-index: 10;
         }
+
         .bio-card {
             background: rgba(18, 25, 45, 0.7);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(18px);
             border-radius: 48px;
             padding: 2rem;
             box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(72, 187, 255, 0.25);
@@ -165,8 +147,8 @@
             transition: transform 0.12s ease-out;
             transform-style: preserve-3d;
             will-change: transform;
-            width: 100%;
         }
+
         .avatar {
             width: 110px;
             height: 110px;
@@ -175,13 +157,8 @@
             background: linear-gradient(135deg, #1e2a4a, #0f172a);
             padding: 3px;
         }
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
-        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+
         .username {
             font-size: 1.9rem;
             font-weight: 800;
@@ -191,16 +168,9 @@
             color: transparent;
             margin-bottom: 0.3rem;
         }
-        .display-name {
-            font-size: 0.95rem;
-            color: #bcd0ff;
-            margin-bottom: 1.5rem;
-        }
-        .social-links {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
+        .display-name { font-size: 0.95rem; color: #bcd0ff; margin-bottom: 1.5rem; }
+
+        .social-links { display: flex; flex-direction: column; gap: 1rem; }
         .social-button {
             display: flex;
             align-items: center;
@@ -215,27 +185,71 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-        .social-button:hover {
-            background: #1a1f2e;
-            border-color: #3b82f6;
-            transform: scale(1.02);
-            gap: 1rem;
+        .social-button img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            object-fit: cover;
         }
+        .social-button:hover { background: #1a1f2e; border-color: #3b82f6; transform: scale(1.02); gap: 1rem; }
+
         @media (max-width: 550px) {
             .bio-card { padding: 1.5rem; }
             .username { font-size: 1.5rem; }
             .avatar { width: 85px; height: 85px; }
+            .social-button img { width: 28px; height: 28px; }
+        }
+
+        @media (pointer: fine) {
+            body { cursor: none; }
+            .trail-dot {
+                position: fixed;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: radial-gradient(circle, cyan, rgba(0, 150, 255, 0.6));
+                pointer-events: none;
+                z-index: 9998;
+                filter: blur(1.5px);
+                opacity: 0.7;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 0 8px cyan;
+            }
+            .custom-cursor {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(0, 255, 255, 0.8), rgba(0, 150, 255, 0.3));
+                position: fixed;
+                pointer-events: none;
+                z-index: 9999;
+                transform: translate(-50%, -50%);
+                transition: transform 0.05s linear;
+                backdrop-filter: blur(5px);
+                box-shadow: 0 0 18px cyan;
+                mix-blend-mode: difference;
+            }
+        }
+        @media (pointer: coarse) {
+            .custom-cursor, .trail-dot { display: none; }
+            body { cursor: auto; }
         }
     </style>
 </head>
 <body>
 
-<canvas id="snowCanvas"></canvas>
-
 <div class="custom-cursor" id="customCursor"></div>
 <div class="overlay" id="overlay">
-    <div class="animated-banner">CLICK TO CONTINUE</div>
+    <div class="ascii-banner">
+_____ _ _      _      _                          _   _                  
+/  __ \ (_)    | |    | |                        | | (_)                 
+| /  \/ |_  ___| | __ | |_ ___     ___ ___  _ __ | |_ _ _ __  _   _  ___ 
+| |   | | |/ __| |/ / | __/ _ \   / __/ _ \| '_ \| __| | '_ \| | | |/ _ \
+| \__/\ | | (__|   <  | || (_) | | (_| (_) | | | | |_| | | | | |_| |  __/
+ \____/_|_|\___|_|\_\  \__\___/   \___\___/|_| |_|\__|_|_| |_|\__,_|\___|
+    </div>
 </div>
+<div class="snow-layer" id="snowLayer"></div>
 
 <div class="tilt-container">
     <div class="bio-card" id="bioCard">
@@ -245,8 +259,12 @@
         <div class="username">zxccyan</div>
         <div class="display-name">@zxccyan</div>
         <div class="social-links">
-            <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank" rel="noopener noreferrer">🔧 GitLab</a>
-            <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">💬 Discord</div>
+            <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank">
+                <img src="https://gitlab.com/MezeLeem/file/-/raw/main/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" alt="gitlab icon"> GitLab
+            </a>
+            <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">
+                <img src="https://gitlab.com/MezeLeem/file/-/raw/main/1741166887_new_preview_b584b1776f49b350c54e5172f9a1f102.jpg" alt="discord icon"> Discord: zxccyans
+            </div>
         </div>
     </div>
 </div>
@@ -256,265 +274,186 @@
 </audio>
 
 <script>
-    (function(){
-        // ========= 1. СНЕГ (АКТИВИРУЕТСЯ ТОЛЬКО ПОСЛЕ КЛИКА) =========
-        const canvas = document.getElementById('snowCanvas');
-        const ctx = canvas.getContext('2d');
-        let width = window.innerWidth;
-        let height = window.innerHeight;
-        let snowflakes = [];
-        let snowActive = false;
-        let animationId = null;
-        
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
-        
-        function createSnowflakes(count = 400) {
-            snowflakes = [];
-            for(let i = 0; i < count; i++) {
-                snowflakes.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 4 + 1,
-                    speedY: Math.random() * 1.5 + 0.4,
-                    speedX: (Math.random() - 0.5) * 0.3,
-                    opacity: Math.random() * 0.5 + 0.3
-                });
+    // АНИМАЦИЯ ЗАГОЛОВКА
+    const animations = [
+        { text: "zxccyan", delay: 1800 },
+        { text: "⋆⧸⋆ zxccyan ⋆⧹⋆", delay: 2400 },
+        { text: "✦ zxccyan ✦", delay: 2000 },
+        { text: "⚡ zxccyan ⚡", delay: 2100 },
+        { text: "✧ zxccyan ✧", delay: 2300 },
+        { text: "» zxccyan «", delay: 2500 },
+        { text: "『 zxccyan 』", delay: 2600 },
+        { text: "★ zxccyan ★", delay: 2400 },
+        { text: "☾ zxccyan ☽", delay: 2700 },
+        { text: "『✦』zxccyan『✧』", delay: 3000 }
+    ];
+    let step = 0, isDeleting = false, charIndex = 0, timer = null;
+    function animateTitle() {
+        const target = animations[step].text;
+        if (!isDeleting) {
+            if (charIndex <= target.length) {
+                document.title = target.substring(0, charIndex);
+                charIndex++;
+                timer = setTimeout(animateTitle, 100);
+            } else {
+                isDeleting = true;
+                clearTimeout(timer);
+                timer = setTimeout(animateTitle, animations[step].delay);
+            }
+        } else {
+            if (charIndex >= 0) {
+                document.title = target.substring(0, charIndex) || " ";
+                charIndex--;
+                timer = setTimeout(animateTitle, 55);
+            } else {
+                isDeleting = false;
+                step = (step + 1) % animations.length;
+                charIndex = 0;
+                clearTimeout(timer);
+                timer = setTimeout(animateTitle, 200);
             }
         }
-        
-        function drawSnow() {
-            if(!snowActive) return;
-            ctx.clearRect(0, 0, width, height);
-            for(let flake of snowflakes) {
-                ctx.beginPath();
-                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
-                ctx.fill();
-            }
+    }
+    animateTitle();
+
+    // БАННЕР + МУЗЫКА
+    const overlay = document.getElementById('overlay');
+    const audio = document.getElementById('bgMusic');
+    let active = false;
+
+    function startSite() {
+        if (active) return;
+        active = true;
+        overlay.classList.add('hidden');
+        audio.muted = false;
+        audio.volume = 0.5;
+        audio.play().catch(e => console.log('autoplay blocked'));
+        document.body.style.overflow = '';
+    }
+    overlay.addEventListener('click', startSite);
+    document.addEventListener('keydown', function once(e) {
+        if (overlay && !overlay.classList.contains('hidden')) { startSite(); document.removeEventListener('keydown', once); }
+    });
+
+    // 3D НАКЛОН КАРТОЧКИ
+    const bioCard = document.getElementById('bioCard');
+    if (bioCard) {
+        const card = bioCard;
+        const maxRotate = 12;
+        function updateTilt(e) {
+            if (!active) return;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const mouseX = (e.clientX - centerX) / centerX;
+            const mouseY = (e.clientY - centerY) / centerY;
+            const rotateY = mouseX * maxRotate;
+            const rotateX = -mouseY * maxRotate;
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px)`;
         }
-        
-        function updateSnow() {
-            if(!snowActive) return;
-            for(let flake of snowflakes) {
-                flake.x += flake.speedX;
-                flake.y += flake.speedY;
-                if(flake.x > width) flake.x = 0;
-                if(flake.x < 0) flake.x = width;
-                if(flake.y > height) {
-                    flake.y = 0;
-                    flake.x = Math.random() * width;
-                }
-            }
-        }
-        
-        function animateSnow() {
-            updateSnow();
-            drawSnow();
-            animationId = requestAnimationFrame(animateSnow);
-        }
-        
-        function startSnow() {
-            if(snowActive) return;
-            snowActive = true;
-            canvas.classList.add('active');
-            resizeCanvas();
-            createSnowflakes(400);
-            if(animationId === null) {
-                animateSnow();
-            }
-        }
-        
-        window.addEventListener('resize', () => {
-            if(snowActive) {
-                resizeCanvas();
-                createSnowflakes(400);
-            }
-        });
-        
-        // ========= 2. КУРСОР И ТРЕЙЛ =========
+        function resetTilt() { if (active) card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`; }
+        window.addEventListener('mousemove', updateTilt);
+        window.addEventListener('mouseleave', resetTilt);
+    }
+
+    // КАСТОМНЫЙ КУРСОР + ТРЕЙЛ
+    if (window.matchMedia("(pointer: fine)").matches) {
         const cursor = document.getElementById('customCursor');
+        const trailContainer = document.createElement('div');
+        trailContainer.style.position = 'fixed';
+        trailContainer.style.top = '0';
+        trailContainer.style.left = '0';
+        trailContainer.style.width = '100%';
+        trailContainer.style.height = '100%';
+        trailContainer.style.pointerEvents = 'none';
+        trailContainer.style.zIndex = '9997';
+        document.body.appendChild(trailContainer);
+        
         let mouseX = 0, mouseY = 0;
         let cursorX = 0, cursorY = 0;
-        const TRAIL_COUNT = 14;
-        let trailElements = [];
         let trailPositions = [];
-        
-        for (let i = 0; i < TRAIL_COUNT; i++) {
-            const trail = document.createElement('div');
-            trail.className = 'trail';
-            document.body.appendChild(trail);
-            trailElements.push(trail);
-            trailPositions.push({ x: 0, y: 0 });
+        const trailLength = 14;
+
+        for (let i = 0; i < trailLength; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'trail-dot';
+            dot.style.position = 'fixed';
+            dot.style.width = '10px';
+            dot.style.height = '10px';
+            dot.style.backgroundColor = `rgba(0, 255, 255, ${0.8 - i * 0.05})`;
+            dot.style.borderRadius = '50%';
+            dot.style.pointerEvents = 'none';
+            dot.style.filter = `blur(${1 + i * 0.2}px)`;
+            dot.style.opacity = 0.6 - i * 0.03;
+            trailContainer.appendChild(dot);
+            trailPositions.push({ x: 0, y: 0, el: dot });
         }
-        
-        window.addEventListener('mousemove', (e) => {
+
+        document.addEventListener('mousemove', (e) => {
+            if (!active) return;
             mouseX = e.clientX;
             mouseY = e.clientY;
+            cursor.style.opacity = '1';
         });
-        
-        function updateCursorAndTrail() {
-            cursorX += (mouseX - cursorX) * 0.25;
-            cursorY += (mouseY - cursorY) * 0.25;
-            cursor.style.left = cursorX + 'px';
-            cursor.style.top = cursorY + 'px';
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+            trailPositions.forEach(p => p.el.style.opacity = '0');
+        });
+        document.addEventListener('mouseenter', () => {
+            if (active) cursor.style.opacity = '1';
+            trailPositions.forEach(p => p.el.style.opacity = '0.6');
+        });
+
+        function animateCursorAndTrail() {
+            if (!active) {
+                requestAnimationFrame(animateCursorAndTrail);
+                return;
+            }
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
             
-            trailPositions.unshift({ x: cursorX, y: cursorY });
+            trailPositions.unshift({ x: cursorX, y: cursorY, el: trailPositions[0].el });
             trailPositions.pop();
-            
-            for (let i = 0; i < TRAIL_COUNT; i++) {
-                const pos = trailPositions[i];
-                if(pos) {
-                    trailElements[i].style.left = pos.x + 'px';
-                    trailElements[i].style.top = pos.y + 'px';
-                    const factor = i / TRAIL_COUNT;
-                    const opacity = 1 - factor * 0.85;
-                    const size = 8 - factor * 6;
-                    trailElements[i].style.opacity = opacity;
-                    trailElements[i].style.width = Math.max(2, size) + 'px';
-                    trailElements[i].style.height = Math.max(2, size) + 'px';
+            for (let i = 0; i < trailPositions.length; i++) {
+                const p = trailPositions[i];
+                if (p && p.x && p.y) {
+                    p.el.style.transform = `translate(${p.x}px, ${p.y}px) translate(-50%, -50%)`;
+                    p.el.style.opacity = 0.55 - i * 0.035;
                 }
             }
-            requestAnimationFrame(updateCursorAndTrail);
+            requestAnimationFrame(animateCursorAndTrail);
         }
-        updateCursorAndTrail();
-        
-        const clickables = document.querySelectorAll('a, .social-button, [onclick], .overlay');
-        clickables.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
-        
-        // ========= 3. БАННЕР + МУЗЫКА + АКТИВАЦИЯ СНЕГА =========
-        const overlay = document.getElementById('overlay');
-        const bioCard = document.getElementById('bioCard');
-        const audio = document.getElementById('bgMusic');
-        let active = false;
-        let fadeInterval = null;
-        
-        function fadeInMusic(targetVolume = 0.5, duration = 1800) {
-            if (fadeInterval) clearInterval(fadeInterval);
-            const startVolume = audio.volume;
-            const steps = 40;
-            let step = 0;
-            const increment = (targetVolume - startVolume) / steps;
-            fadeInterval = setInterval(() => {
-                step++;
-                let newVol = startVolume + increment * step;
-                if(step >= steps) {
-                    newVol = targetVolume;
-                    clearInterval(fadeInterval);
-                    fadeInterval = null;
-                }
-                audio.volume = Math.min(1, Math.max(0, newVol));
-            }, duration / steps);
-        }
-        
-        function startSite() {
-            if(active) return;
-            active = true;
-            overlay.classList.add('hidden');
-            audio.muted = false;
-            audio.volume = 0;
-            audio.play().catch(e => console.log("autoplay blocked"));
-            fadeInMusic(0.5, 1800);
-            document.body.style.overflow = '';
-            
-            // Запуск снега после клика
-            startSnow();
-        }
-        overlay.addEventListener('click', startSite);
-        document.addEventListener('keydown', function once(e) {
-            if(overlay && !overlay.classList.contains('hidden')) {
-                startSite();
-                document.removeEventListener('keydown', once);
+        animateCursorAndTrail();
+    }
+
+    // ПРОСТЫЕ ТЕКСТОВЫЕ СНЕЖИНКИ (❄️)
+    const snowLayer = document.getElementById('snowLayer');
+    function addSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        snowflake.innerHTML = '❄️';
+        const size = Math.random() * 20 + 12; // от 12 до 32px
+        snowflake.style.fontSize = size + 'px';
+        snowflake.style.left = Math.random() * window.innerWidth + 'px';
+        snowflake.style.animationDuration = Math.random() * 5 + 3 + 's'; // 3-8 секунд
+        snowflake.style.opacity = Math.random() * 0.6 + 0.3;
+        snowLayer.appendChild(snowflake);
+        snowflake.addEventListener('animationend', () => snowflake.remove());
+    }
+
+    function startSnowfall() {
+        setInterval(() => {
+            const flakesCount = Math.floor(Math.random() * 6) + 3; // 3–8 снежинок за раз
+            for (let i = 0; i < flakesCount; i++) {
+                addSnowflake();
             }
-        });
-        
-        // ========= 4. 3D-НАКЛОН КАРТОЧКИ =========
-        if(bioCard) {
-            const card = bioCard;
-            const MAX_ROTATE = 12;
-            function updateTilt(e) {
-                if(!active) return;
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
-                const normX = (e.clientX - centerX) / centerX;
-                const normY = (e.clientY - centerY) / centerY;
-                const rotY = normX * MAX_ROTATE;
-                const rotX = -normY * MAX_ROTATE;
-                card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(5px)`;
-            }
-            function resetTilt() {
-                if(!active) return;
-                card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
-            }
-            window.addEventListener('mousemove', updateTilt);
-            window.addEventListener('mouseleave', resetTilt);
-        }
-        
-        // ========= 5. АНИМАЦИЯ ЗАГОЛОВКА =========
-        const titleAnimations = [
-            "zxccyan", "⋆⧸⋆ zxccyan ⋆⧹⋆", "✦ zxccyan ✦", "◈ zxccyan ◈",
-            "⚡ zxccyan ⚡", "◆━━ zxccyan ━━◆", "『 zxccyan 』", "【 zxccyan 】",
-            "『◉ zxccyan ◉』", "⌘ zxccyan ⌘", "☯ zxccyan ☯", "❖ zxccyan ❖",
-            "✧༺ zxccyan ༻✧", "» zxccyan «", "『✧ zxccyan ✧』", "▰▰ zxccyan ▰▰"
-        ];
-        let animIdx = 0, deleting = false, charPos = 0;
-        let titleTimer = null;
-        
-        function animateTitle() {
-            const target = titleAnimations[animIdx];
-            if(!deleting) {
-                if(charPos <= target.length) {
-                    const partial = target.substring(0, charPos) || " ";
-                    document.title = partial;
-                    const ogTitle = document.getElementById('ogTitle');
-                    const ogDesc = document.getElementById('ogDesc');
-                    const twTitle = document.getElementById('twTitle');
-                    const twDesc = document.getElementById('twDesc');
-                    if(ogTitle) ogTitle.setAttribute('content', `✨ ${partial} ✨`);
-                    if(ogDesc) ogDesc.setAttribute('content', `3D-профиль ${partial} со снегом`);
-                    if(twTitle) twTitle.setAttribute('content', `✨ ${partial} ✨`);
-                    if(twDesc) twDesc.setAttribute('content', `Снежный профиль ${partial}`);
-                    charPos++;
-                    titleTimer = setTimeout(animateTitle, 55);
-                } else {
-                    deleting = true;
-                    titleTimer = setTimeout(animateTitle, 1800);
-                }
-            } else {
-                if(charPos >= 0) {
-                    const partial = target.substring(0, charPos) || " ";
-                    document.title = partial;
-                    const ogTitle = document.getElementById('ogTitle');
-                    const ogDesc = document.getElementById('ogDesc');
-                    const twTitle = document.getElementById('twTitle');
-                    const twDesc = document.getElementById('twDesc');
-                    if(ogTitle) ogTitle.setAttribute('content', `✨ ${partial} ✨`);
-                    if(ogDesc) ogDesc.setAttribute('content', `3D-профиль ${partial} со снегом`);
-                    if(twTitle) twTitle.setAttribute('content', `✨ ${partial} ✨`);
-                    if(twDesc) twDesc.setAttribute('content', `Снежный профиль ${partial}`);
-                    charPos--;
-                    titleTimer = setTimeout(animateTitle, 35);
-                } else {
-                    deleting = false;
-                    animIdx = (animIdx + 1) % titleAnimations.length;
-                    charPos = 0;
-                    titleTimer = setTimeout(animateTitle, 200);
-                }
-            }
-        }
-        animateTitle();
-        
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => alert('Copied: ' + text)).catch(() => prompt('Copy manually:', text));
-        }
-    })();
+        }, 70);
+    }
+    startSnowfall();
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => alert('Copied: ' + text)).catch(() => prompt('Copy manually:', text));
+    }
 </script>
 </body>
 </html>
