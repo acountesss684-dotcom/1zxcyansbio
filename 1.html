@@ -37,7 +37,7 @@
             z-index: 0;
         }
 
-        /* СНЕГ — МАЛЕНЬКИЕ БЕЛЫЕ ТОЧКИ (фикс накопления) */
+        /* СНЕГ — МАЛЕНЬКИЕ БЕЛЫЕ ТОЧКИ (исправлен) */
         .snow-layer {
             position: fixed;
             top: 0;
@@ -107,9 +107,17 @@
             .ascii-banner { font-size: 0.35rem; }
         }
 
-        .container {
-            max-width: 580px;
+        /* 3D-КАРТОЧКА (работает) */
+        .tilt-container {
+            perspective: 1200px;
             width: 100%;
+            max-width: 580px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
             background: rgba(18, 25, 45, 0.7);
             backdrop-filter: blur(18px);
             border-radius: 48px;
@@ -117,8 +125,9 @@
             padding: 2rem;
             box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.4);
             text-align: center;
-            position: relative;
-            z-index: 10;
+            transition: transform 0.12s ease-out;
+            transform-style: preserve-3d;
+            will-change: transform;
         }
 
         .avatar {
@@ -271,30 +280,29 @@ _____ _ _      _      _                          _   _
 </div>
 
 <div class="custom-cursor" id="customCursor"></div>
-
-<!-- СНЕГ — МАЛЕНЬКИЕ БЕЛЫЕ ТОЧКИ (ФИКС НАКОПЛЕНИЯ) -->
 <div class="snow-layer" id="snowLayer"></div>
 
-<div class="container">
-    <div class="avatar">
-        <img src="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads" alt="avatar">
-    </div>
-    <div class="username">zxccyan</div>
-    <div class="display-name">@zxccyan</div>
+<div class="tilt-container">
+    <div class="container" id="bioCard">
+        <div class="avatar">
+            <img src="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads" alt="avatar">
+        </div>
+        <div class="username">zxccyan</div>
+        <div class="display-name">@zxccyan</div>
 
-    <div class="social-links">
-        <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank">
-            <img src="https://gitlab.com/MezeLeem/file/-/raw/main/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" alt="gitlab icon">
-            GitLab
-        </a>
-        <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">
-            <img src="https://gitlab.com/MezeLeem/file/-/raw/main/1741166887_new_preview_b584b1776f49b350c54e5172f9a1f102.jpg" alt="discord icon">
-            Discord: zxccyans
+        <div class="social-links">
+            <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank">
+                <img src="https://gitlab.com/MezeLeem/file/-/raw/main/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" alt="gitlab icon">
+                GitLab
+            </a>
+            <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">
+                <img src="https://gitlab.com/MezeLeem/file/-/raw/main/1741166887_new_preview_b584b1776f49b350c54e5172f9a1f102.jpg" alt="discord icon">
+                Discord: zxccyans
+            </div>
         </div>
     </div>
 </div>
 
-<!-- USDT ПЛАШКА -->
 <div class="usdt-fixed" onclick="copyToClipboard('TB5LkzDYx384XAaA6t1g8dwW1MQe5U91T2')">
     <span class="label">💎 USDT TRC20</span>
     <span class="address">TB5LkzDYx384XAaA6t1g8dwW1MQe5U91T2</span>
@@ -367,18 +375,21 @@ _____ _ _      _      _                          _   _
     }
     typeTitle();
 
-    // ========= 3D-НАКЛОН =========
-    const container = document.querySelector('.container');
-    if (container) {
+    // ========= 3D-НАКЛОН КАРТОЧКИ (ВОССТАНОВЛЕН) =========
+    const card = document.getElementById('bioCard');
+    if (card) {
         window.addEventListener('mousemove', (e) => {
             if (!active) return;
-            const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-            const mx = (e.clientX - cx) / cx, my = (e.clientY - cy) / cy;
-            const rx = -my * 12, ry = mx * 12;
-            container.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(5px)`;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const mouseX = (e.clientX - centerX) / centerX;
+            const mouseY = (e.clientY - centerY) / centerY;
+            const rotateY = mouseX * 12;
+            const rotateX = -mouseY * 12;
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px)`;
         });
         window.addEventListener('mouseleave', () => {
-            if (active) container.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+            if (active) card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
         });
     }
 
@@ -440,13 +451,12 @@ _____ _ _      _      _                          _   _
         animate();
     }
 
-    // ========= СНЕГ — МАЛЕНЬКИЕ БЕЛЫЕ ТОЧКИ, ФИКС НАКОПЛЕНИЯ =========
+    // ========= СНЕГ — МАЛЕНЬКИЕ БЕЛЫЕ ТОЧКИ (фикс накопления) =========
     const snowLayer = document.getElementById('snowLayer');
     let activeParticles = [];
     const MAX_PARTICLES = 400;
 
     function addSnowParticle() {
-        // Ограничиваем максимальное количество частиц
         while (activeParticles.length >= MAX_PARTICLES) {
             const oldest = activeParticles.shift();
             if (oldest && oldest.remove) oldest.remove();
@@ -454,15 +464,14 @@ _____ _ _      _      _                          _   _
 
         const particle = document.createElement('div');
         particle.classList.add('snow-particle');
-        const size = Math.random() * 5 + 2; // 2–7px
+        const size = Math.random() * 5 + 2;
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
         particle.style.left = Math.random() * window.innerWidth + 'px';
         particle.style.top = '-10px';
         particle.style.opacity = Math.random() * 0.5 + 0.3;
         
-        // Скорость падения (пикселей в секунду)
-        const speed = 20 + Math.random() * 40; // 20–60 px/сек
+        const speed = 20 + Math.random() * 40;
         let posY = -10;
         let startTime = null;
         
@@ -487,10 +496,9 @@ _____ _ _      _      _                          _   _
         requestAnimationFrame(animateParticle);
     }
 
-    // Добавляем частицы равномерно (даже в фоне, т.к. setInterval не зависит от видимости)
     setInterval(() => {
-        if (!active) return; // не запускаем снег до клика
-        const newCount = Math.floor(Math.random() * 6) + 5; // 5–10 новых снежинок
+        if (!active) return;
+        const newCount = Math.floor(Math.random() * 6) + 5;
         for (let i = 0; i < newCount; i++) {
             addSnowParticle();
         }
