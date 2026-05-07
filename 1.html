@@ -37,8 +37,8 @@
             z-index: 0;
         }
 
-        /* СНЕЖИНКИ — ИСПОЛЬЗУЮТ requestAnimationFrame, НЕ ЗАВИСЯТ ОТ ВКЛАДКИ */
-        .snow-canvas {
+        /* СНЕГ — МАЛЕНЬКИЕ БЕЛЫЕ ТОЧКИ (фикс накопления) */
+        .snow-layer {
             position: fixed;
             top: 0;
             left: 0;
@@ -46,9 +46,19 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
+            overflow: hidden;
+        }
+        .snow-particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            box-shadow: 0 0 2px rgba(255,255,255,0.5);
+            will-change: transform;
+            pointer-events: none;
         }
 
-        /* БАННЕР */
+        /* ОВЕРЛЕЙ (CLICK TO CONTINUE) С ASCII-АРТОМ */
         .overlay {
             position: fixed;
             top: 0;
@@ -79,6 +89,7 @@
             padding: 2rem;
             border-radius: 32px;
             backdrop-filter: blur(4px);
+            letter-spacing: 1px;
             animation: bannerPulse 1.7s infinite alternate, shimmer 3s linear infinite;
         }
         @keyframes bannerPulse {
@@ -90,29 +101,26 @@
             100% { background-position: 200% 50%; }
         }
         @media (max-width: 760px) {
-            .ascii-banner { font-size: 0.5rem; padding: 1rem; white-space: normal; }
+            .ascii-banner { font-size: 0.5rem; padding: 1rem; white-space: normal; word-break: break-word; }
+        }
+        @media (max-width: 550px) {
+            .ascii-banner { font-size: 0.35rem; }
         }
 
-        /* КАРТОЧКА */
-        .tilt-container {
-            perspective: 1200px;
+        .container {
+            max-width: 580px;
             width: 100%;
-            max-width: 650px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-        }
-        .bio-card {
             background: rgba(18, 25, 45, 0.7);
             backdrop-filter: blur(18px);
             border-radius: 48px;
+            border: 1px solid rgba(72, 187, 255, 0.3);
             padding: 2rem;
-            box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(72, 187, 255, 0.25);
+            box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.4);
             text-align: center;
-            transition: transform 0.12s ease-out;
-            transform-style: preserve-3d;
-            will-change: transform;
+            position: relative;
+            z-index: 10;
         }
+
         .avatar {
             width: 110px;
             height: 110px;
@@ -122,6 +130,7 @@
             padding: 3px;
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+
         .username {
             font-size: 1.9rem;
             font-weight: 800;
@@ -132,7 +141,8 @@
             margin-bottom: 0.3rem;
         }
         .display-name { font-size: 0.95rem; color: #bcd0ff; margin-bottom: 1.5rem; }
-        .social-links { display: flex; flex-direction: column; gap: 1rem; }
+
+        .social-links { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 0; }
         .social-button {
             display: flex;
             align-items: center;
@@ -149,14 +159,65 @@
         }
         .social-button img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
         .social-button:hover { background: #1a1f2e; border-color: #3b82f6; transform: scale(1.02); gap: 1rem; }
+
         @media (max-width: 550px) {
-            .bio-card { padding: 1.5rem; }
+            .container { padding: 1.5rem; }
             .username { font-size: 1.5rem; }
             .avatar { width: 85px; height: 85px; }
             .social-button img { width: 28px; height: 28px; }
         }
 
-        /* КУРСОР + ТРЕЙЛ (ДЕСКТОП) */
+        /* ПЛАШКА USDT */
+        .usdt-fixed {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 50px;
+            padding: 10px 18px;
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #a0f0ff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .usdt-fixed:hover {
+            background: rgba(0, 0, 0, 0.85);
+            border-color: cyan;
+            transform: scale(1.02);
+        }
+        .usdt-fixed .label {
+            font-size: 10px;
+            color: #70c8ff;
+            letter-spacing: 1px;
+        }
+        .usdt-fixed .address {
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .usdt-fixed .copy-icon {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 550px) {
+            .usdt-fixed { 
+                padding: 6px 12px;
+                font-size: 9px;
+                bottom: 12px;
+                right: 12px;
+            }
+            .usdt-fixed .label { font-size: 8px; }
+        }
+
+        /* КАСТОМНЫЙ КУРСОР */
         @media (pointer: fine) {
             body {
                 cursor: none;
@@ -172,9 +233,9 @@
                 backdrop-filter: blur(5px);
                 box-shadow: 0 0 18px cyan;
                 mix-blend-mode: difference;
+                will-change: left, top;
                 opacity: 0;
                 transition: opacity 0.2s;
-                will-change: left, top;
             }
             .trail-dot {
                 position: fixed;
@@ -198,7 +259,6 @@
 </head>
 <body>
 
-<div class="custom-cursor" id="customCursor"></div>
 <div class="overlay" id="overlay">
     <div class="ascii-banner">
 _____ _ _      _      _                          _   _                  
@@ -210,24 +270,35 @@ _____ _ _      _      _                          _   _
     </div>
 </div>
 
-<canvas id="snowCanvas" class="snow-canvas"></canvas>
+<div class="custom-cursor" id="customCursor"></div>
 
-<div class="tilt-container">
-    <div class="bio-card" id="bioCard">
-        <div class="avatar">
-            <img src="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads" alt="avatar">
-        </div>
-        <div class="username">zxccyan</div>
-        <div class="display-name">@zxccyan</div>
-        <div class="social-links">
-            <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank">
-                <img src="https://gitlab.com/MezeLeem/file/-/raw/main/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" alt="gitlab icon"> GitLab
-            </a>
-            <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">
-                <img src="https://gitlab.com/MezeLeem/file/-/raw/main/1741166887_new_preview_b584b1776f49b350c54e5172f9a1f102.jpg" alt="discord icon"> Discord: zxccyans
-            </div>
+<!-- СНЕГ — МАЛЕНЬКИЕ БЕЛЫЕ ТОЧКИ (ФИКС НАКОПЛЕНИЯ) -->
+<div class="snow-layer" id="snowLayer"></div>
+
+<div class="container">
+    <div class="avatar">
+        <img src="https://gitlab.com/MezeLeem/file/-/raw/main/a20a38345566355140333b3eefd7a306.png?ref_type=heads" alt="avatar">
+    </div>
+    <div class="username">zxccyan</div>
+    <div class="display-name">@zxccyan</div>
+
+    <div class="social-links">
+        <a href="https://gitlab.com/MezeLeem" class="social-button" target="_blank">
+            <img src="https://gitlab.com/MezeLeem/file/-/raw/main/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" alt="gitlab icon">
+            GitLab
+        </a>
+        <div class="social-button" style="cursor: pointer;" onclick="copyToClipboard('zxccyans')">
+            <img src="https://gitlab.com/MezeLeem/file/-/raw/main/1741166887_new_preview_b584b1776f49b350c54e5172f9a1f102.jpg" alt="discord icon">
+            Discord: zxccyans
         </div>
     </div>
+</div>
+
+<!-- USDT ПЛАШКА -->
+<div class="usdt-fixed" onclick="copyToClipboard('TB5LkzDYx384XAaA6t1g8dwW1MQe5U91T2')">
+    <span class="label">💎 USDT TRC20</span>
+    <span class="address">TB5LkzDYx384XAaA6t1g8dwW1MQe5U91T2</span>
+    <span class="copy-icon">📋</span>
 </div>
 
 <audio id="bgMusic" loop preload="auto">
@@ -235,13 +306,12 @@ _____ _ _      _      _                          _   _
 </audio>
 
 <script>
-    // ==================== АКТИВАЦИЯ ПОСЛЕ КЛИКА ====================
+    // ========= АКТИВАЦИЯ =========
     const overlay = document.getElementById('overlay');
     const audio = document.getElementById('bgMusic');
-    const cursor = document.getElementById('customCursor');
     let active = false;
 
-    function start() {
+    function startSite() {
         if (active) return;
         active = true;
         overlay.classList.add('hidden');
@@ -249,18 +319,19 @@ _____ _ _      _      _                          _   _
         audio.volume = 0.5;
         audio.play().catch(() => {});
         document.body.style.overflow = '';
-        if (cursor) cursor.style.opacity = '1';
+        if (customCursor) customCursor.style.opacity = '1';
+        if (trailDots) trailDots.forEach(d => d.el.style.opacity = '0.6');
     }
 
-    overlay.addEventListener('click', start);
+    overlay.addEventListener('click', startSite);
     document.addEventListener('keydown', function once(e) {
         if (overlay && !overlay.classList.contains('hidden')) {
-            start();
+            startSite();
             document.removeEventListener('keydown', once);
         }
     });
 
-    // ==================== АНИМАЦИЯ ЗАГОЛОВКА ====================
+    // ========= АНИМАЦИЯ ЗАГОЛОВКА =========
     const titles = [
         "zxccyan", "⋆⧸⋆ zxccyan ⋆⧹⋆", "✦ zxccyan ✦", "⚡ zxccyan ⚡",
         "✧ zxccyan ✧", "» zxccyan «", "『 zxccyan 』", "★ zxccyan ★",
@@ -296,33 +367,35 @@ _____ _ _      _      _                          _   _
     }
     typeTitle();
 
-    // ==================== 3D-НАКЛОН КАРТОЧКИ ====================
-    const card = document.getElementById('bioCard');
-    if (card) {
+    // ========= 3D-НАКЛОН =========
+    const container = document.querySelector('.container');
+    if (container) {
         window.addEventListener('mousemove', (e) => {
             if (!active) return;
             const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
             const mx = (e.clientX - cx) / cx, my = (e.clientY - cy) / cy;
             const rx = -my * 12, ry = mx * 12;
-            card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(5px)`;
+            container.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(5px)`;
         });
         window.addEventListener('mouseleave', () => {
-            if (active) card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+            if (active) container.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
         });
     }
 
-    // ==================== КУРСОР + ТРЕЙЛ ====================
+    // ========= КУРСОР+ТРЕЙЛ =========
+    const customCursor = document.getElementById('customCursor');
+    let trailDots = null;
     if (window.matchMedia("(pointer: fine)").matches) {
         const trailContainer = document.createElement('div');
         trailContainer.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;';
         document.body.appendChild(trailContainer);
         
-        const dots = [];
+        trailDots = [];
         for (let i = 0; i < 12; i++) {
             const dot = document.createElement('div');
             dot.className = 'trail-dot';
             trailContainer.appendChild(dot);
-            dots.push({ x: 0, y: 0, el: dot });
+            trailDots.push({ x: 0, y: 0, el: dot });
         }
         
         let mouseX = 0, mouseY = 0, curX = 0, curY = 0;
@@ -337,26 +410,26 @@ _____ _ _      _      _                          _   _
             if (!active) return;
             mouseX = e.clientX;
             mouseY = e.clientY;
-            if (cursor) {
-                cursor.style.opacity = '1';
-                updatePosition(cursor, mouseX, mouseY);
+            if (customCursor) {
+                customCursor.style.opacity = '1';
+                updatePosition(customCursor, mouseX, mouseY);
             }
-            dots.forEach(d => d.el.style.opacity = '0.6');
+            trailDots.forEach(d => d.el.style.opacity = '0.6');
         });
         
         document.addEventListener('mouseleave', () => {
-            if (cursor) cursor.style.opacity = '0';
-            dots.forEach(d => d.el.style.opacity = '0');
+            if (customCursor) customCursor.style.opacity = '0';
+            trailDots.forEach(d => d.el.style.opacity = '0');
         });
         
         function animate() {
             if (!active) { requestAnimationFrame(animate); return; }
             curX += (mouseX - curX) * 0.2;
             curY += (mouseY - curY) * 0.2;
-            if (cursor) updatePosition(cursor, curX, curY);
-            dots.unshift({ x: curX, y: curY, el: dots.pop().el });
-            for (let i = 0; i < dots.length; i++) {
-                const d = dots[i];
+            if (customCursor) updatePosition(customCursor, curX, curY);
+            trailDots.unshift({ x: curX, y: curY, el: trailDots.pop().el });
+            for (let i = 0; i < trailDots.length; i++) {
+                const d = trailDots[i];
                 if (d.x !== undefined && d.el) {
                     updatePosition(d.el, d.x, d.y);
                     d.el.style.opacity = 0.6 - i * 0.05;
@@ -367,78 +440,64 @@ _____ _ _      _      _                          _   _
         animate();
     }
 
-    // ==================== СНЕГОПАД ЧЕРЕЗ CANVAS + requestAnimationFrame (не останавливается при бездействии вкладки) ====================
-    const canvas = document.getElementById('snowCanvas');
-    const ctx = canvas.getContext('2d');
-    let snowflakes = [];
-    let animationId = null;
-    let lastTimestamp = 0;
+    // ========= СНЕГ — МАЛЕНЬКИЕ БЕЛЫЕ ТОЧКИ, ФИКС НАКОПЛЕНИЯ =========
+    const snowLayer = document.getElementById('snowLayer');
+    let activeParticles = [];
+    const MAX_PARTICLES = 400;
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-
-    function initSnowflakes(count = 120) {
-        snowflakes = [];
-        for (let i = 0; i < count; i++) {
-            snowflakes.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 4 + 2,
-                speedY: Math.random() * 2 + 1,
-                opacity: Math.random() * 0.6 + 0.3
-            });
+    function addSnowParticle() {
+        // Ограничиваем максимальное количество частиц
+        while (activeParticles.length >= MAX_PARTICLES) {
+            const oldest = activeParticles.shift();
+            if (oldest && oldest.remove) oldest.remove();
         }
-    }
 
-    function drawSnowflakes() {
-        if (!ctx) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'white';
-        for (const flake of snowflakes) {
-            ctx.beginPath();
-            ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
-            ctx.fill();
-        }
-    }
-
-    function updateSnowflakes() {
-        for (const flake of snowflakes) {
-            flake.y += flake.speedY;
-            if (flake.y > canvas.height) {
-                flake.y = -flake.radius;
-                flake.x = Math.random() * canvas.width;
+        const particle = document.createElement('div');
+        particle.classList.add('snow-particle');
+        const size = Math.random() * 5 + 2; // 2–7px
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * window.innerWidth + 'px';
+        particle.style.top = '-10px';
+        particle.style.opacity = Math.random() * 0.5 + 0.3;
+        
+        // Скорость падения (пикселей в секунду)
+        const speed = 20 + Math.random() * 40; // 20–60 px/сек
+        let posY = -10;
+        let startTime = null;
+        
+        const animateParticle = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const elapsed = (timestamp - startTime) / 1000;
+            posY = -10 + elapsed * speed;
+            
+            if (posY > window.innerHeight + 50) {
+                particle.remove();
+                const index = activeParticles.indexOf(particle);
+                if (index !== -1) activeParticles.splice(index, 1);
+                return;
             }
+            
+            particle.style.transform = `translateY(${posY}px)`;
+            requestAnimationFrame(animateParticle);
+        };
+        
+        snowLayer.appendChild(particle);
+        activeParticles.push(particle);
+        requestAnimationFrame(animateParticle);
+    }
+
+    // Добавляем частицы равномерно (даже в фоне, т.к. setInterval не зависит от видимости)
+    setInterval(() => {
+        if (!active) return; // не запускаем снег до клика
+        const newCount = Math.floor(Math.random() * 6) + 5; // 5–10 новых снежинок
+        for (let i = 0; i < newCount; i++) {
+            addSnowParticle();
         }
-    }
-
-    function animateSnow(timestamp) {
-        if (!canvas || !ctx) return;
-        updateSnowflakes();
-        drawSnowflakes();
-        animationId = requestAnimationFrame(animateSnow);
-    }
-
-    function startSnow() {
-        if (animationId) cancelAnimationFrame(animationId);
-        resizeCanvas();
-        initSnowflakes(140);
-        animateSnow();
-    }
-
-    window.addEventListener('resize', () => {
-        if (canvas) {
-            resizeCanvas();
-            initSnowflakes(140);
-        }
-    });
-
-    startSnow();
+    }, 150);
 
     function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => alert('Copied: ' + text)).catch(() => prompt('Copy manually:', text));
+        navigator.clipboard.writeText(text).then(() => alert('✅ Адрес скопирован!')).catch(() => prompt('Скопируйте вручную:', text));
     }
 </script>
 </body>
